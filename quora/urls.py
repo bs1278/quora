@@ -26,8 +26,8 @@ from questions.views import (home_view,
 
 urlpatterns = [
     
-    path('login', auth_views.login, {'template_name': 'login.html'}, name='login_view'),
-    path('logout', auth_views.logout, name='logout_view'),    
+    path('login', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login_view'),
+    path('logout', auth_views.LogoutView.as_view(), name='logout_view'),    
     path('user-creation', create_user_view, name='user_creation_view'),
     path('user-details/<int:pk>/', user_detail_view, name='user_detail_view'),
     path('admin/', admin.site.urls),

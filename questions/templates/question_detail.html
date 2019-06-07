@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+        <div class="row">
+                <div class="col-12 col-lg-6 col-md-5 col-sm5">
+                <main role="main">
+                      <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-white rounded box-shadow">
+                        <img class="mr-3" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-outline.svg" alt="" width="48" height="48">
+                        <div class="lh-100">
+                          <h6 class="mb-0 text-success lh-100">{{question.question}}<a href="{% url 'user_detail_view' question.asked_by.id %}"><span style="font-size: 13px;" class="text-success">&emsp;{{question.asked_by}}</span></a> </h6>
+                          <small>{{user.joined}}</small>
+                        </div>
+                      </div>
+
+                      <div class="my-3 p-3 bg-white rounded box-shadow">
+                        <h6 class="border-bottom border-gray pb-2 mb-0">Answeres</h6>
+                          {% for ans in question.answer_set.all %}
+                        <div class="media text-muted pt-3">
+                          <img data-src="holder.js/32x32?theme=thumb&bg=007bff&fg=007bff&size=1" alt="" class="mr-2 rounded">
+                          <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                            <strong class="d-block text-gray-dark">@{{ans.answer.answer_by}}</strong>
+                            {{ans.answer|linebreaks}}
+                              </p>
+                        </div>
+                        {% endfor %}               
+                      </div>
+                </main>            
+
+            </div>
+            <div class="col-12 col-lg-6 col-md-5 col-sm-5">
+                <main role="main">
+                      <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-white rounded box-shadow">
+                        <img class="mr-3" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-outline.svg" alt="" width="48" height="48">
+                        <div class="lh-100">
+                          <h6 class="mb-0 text-success lh-100"><a href="{% url 'user_detail_view' question.asked_by.id %}"><span style="font-size: 13px;" class="text-success">Please share your knowdlege</span></a> </h6>
+                          <small>{{user.joined}}</small>
+                        </div>
+                      </div>
+
+                      <div class="my-3 p-3 bg-white rounded box-shadow">
+                         <form method="post">
+                                        {% csrf_token %}
+                                         {{answer_form|crispy}}
+                            <button class="btn btn-success btn-block" id="submit">Submit</button>
+                        </form>                      
+
+                      </div>
+                </main>            
+
+            </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>    
+$("#isubmit").click(function(){
+        console.log($(this).val())
+        var answer = $("#id_answer").val();
+    
+        $.ajax({
+            url = '/answer_view/',
+            data:{
+                'answer':answer
+            },
+            dataType: 'json',
+            success:function(data){
+                alert("thank you for answering")
+            }
+        })
+
+    
+    })
+</script>
+{% endblock %}
